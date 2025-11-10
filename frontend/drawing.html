@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing - KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Drawing Screen -->
+    <div id="drawing-screen" class="app-screen active">
+        <div class="dashboard-header" style="justify-content: flex-start; max-width: 800px; margin: 0 auto 30px;">
+            <button class="btn btn-secondary" onclick="navigate('child-home.html')" style="margin-right: 20px;">
+                &larr; Back
+            </button>
+            <h1 style="color: var(--color-orange); font-size: 2em;">Drawing Canvas 🎨</h1>
+        </div>
+
+        <div style="flex-grow: 1; display: flex; align-items: stretch; justify-content: center; max-width: 800px; width: 100%; margin: 0 auto;">
+            <canvas id="drawing-canvas"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

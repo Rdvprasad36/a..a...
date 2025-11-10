@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning - KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- E-Learning Screen -->
+    <div id="elearning-screen" class="app-screen video-gallery-screen active">
+        <div class="video-gallery-header">
+            <button class="btn btn-secondary" onclick="navigate('child-home.html')" style="margin-right: 20px;">
+                &larr; Back
+            </button>
+            <h1 style="color: var(--color-elearning-teal); font-size: 2em;">E-Learning 💻</h1>
+        </div>
+        <div class="video-grid" id="elearning-video-grid">
+            <!-- Videos will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

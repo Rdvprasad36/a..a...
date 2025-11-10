@@ -1,0 +1,528 @@
+/*
+=========================================================
+Professional Login Page Styles
+========================================================
+*/
+
+/* Login Page Container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Dino Game Container - Moved beside login section */
+.dino-game-container {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.dino-game-container:hover {
+    opacity: 1;
+}
+
+#dino-canvas {
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+}
+
+/* Main Login Card - Professional Design */
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 450px;
+    width: 100%;
+    position: relative;
+    z-index: 20;
+    animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Login Mascot - Professional styling */
+.login-mascot {
+    font-size: 4em;
+    text-align: center;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    animation: bounceIn 1s ease-out 0.3s both;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Tab Buttons - Modern design */
+.tab-buttons, .sub-tab-buttons {
+    display: flex;
+    margin-bottom: 30px;
+    background: #FFE0B2;
+    border-radius: 15px;
+    padding: 5px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab-buttons .btn, .sub-tab-buttons .btn {
+    flex: 1;
+    border-radius: 12px;
+    margin: 0;
+    padding: 12px 20px;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-buttons .btn::before, .sub-tab-buttons .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.tab-buttons .btn:hover::before, .sub-tab-buttons .btn:hover::before {
+    left: 100%;
+}
+
+.tab-buttons .btn.active-tab, .sub-tab-buttons .btn.active-tab {
+    background: linear-gradient(135deg, #FF8A00, #ff6b35);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Auth Forms - Clean and professional */
+.auth-form {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Photo Upload Container - Enhanced */
+.photo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.photo-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #B3E0FF, #C8E6C9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    border: 3px solid #FF8A00;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.photo-preview:hover {
+    transform: scale(1.05);
+}
+
+.photo-preview img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.photo-upload-btn {
+    background: linear-gradient(135deg, #FF8A00, #ff6b35);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+}
+
+.photo-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 138, 0, 0.4);
+}
+
+/* Form Inputs - Professional styling */
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"],
+.auth-form input[type="number"],
+.auth-form select {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    font-size: 1em;
+    font-family: 'Quicksand', 'Nunito', sans-serif;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+    outline: none;
+    border-color: #FF8A00;
+    box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+    background: white;
+    transform: translateY(-2px);
+}
+
+.auth-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Error Messages - Professional styling */
+#login-error-message,
+#signup-error-message,
+#admin-error-message {
+    background: linear-gradient(135deg, #fee, #fdd);
+    color: #c53030;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 20px;
+    border-left: 4px solid #c53030;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Submit Buttons - Enhanced */
+.auth-form button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #FF8A00, #ff6b35);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(255, 138, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-form button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.auth-form button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+.auth-form button[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 138, 0, 0.4);
+}
+
+.auth-form button[type="submit"]:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
+}
+
+/* Forgot Links - Professional styling */
+.forgot-links {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.forgot-links a {
+    color: #FF8A00;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.forgot-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #FF8A00;
+    transition: width 0.3s ease;
+}
+
+.forgot-links a:hover::after {
+    width: 100%;
+}
+
+.forgot-links a:hover {
+    color: #ff6b35;
+    transform: translateY(-1px);
+}
+
+/* Floating Elements - Enhanced animations */
+.floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.floating-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    animation: float 20s infinite linear;
+    opacity: 0.6;
+}
+
+.floating-element:nth-child(1) { animation-delay: 0s; }
+.floating-element:nth-child(2) { animation-delay: 5s; }
+.floating-element:nth-child(3) { animation-delay: 10s; }
+.floating-element:nth-child(4) { animation-delay: 15s; }
+.floating-element:nth-child(5) { animation-delay: 20s; }
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.6;
+    }
+    25% {
+        transform: translateY(-20px) rotate(90deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(0px) rotate(180deg);
+        opacity: 0.6;
+    }
+    75% {
+        transform: translateY(20px) rotate(270deg);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(0px) rotate(360deg);
+        opacity: 0.6;
+    }
+}
+
+/* Modal Enhancements - Professional */
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.custom-modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.custom-modal .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.custom-modal.visible .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-btn:hover {
+    background: #f8f9fa;
+    color: #495057;
+    transform: rotate(90deg);
+}
+
+/* Responsive Design for Login */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+        max-width: 100%;
+        margin: 0 10px;
+    }
+
+    .dino-game-container {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 20px;
+        order: -1;
+    }
+
+    .login-mascot {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+
+    .tab-buttons, .sub-tab-buttons {
+        margin-bottom: 20px;
+    }
+
+    .tab-buttons .btn, .sub-tab-buttons .btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
+    .auth-form input[type="email"],
+    .auth-form input[type="password"],
+    .auth-form input[type="text"],
+    .auth-form input[type="number"],
+    .auth-form select {
+        padding: 12px 16px;
+        margin-bottom: 15px;
+    }
+
+    .auth-form button[type="submit"] {
+        padding: 14px;
+        font-size: 1em;
+    }
+
+    .floating-elements {
+        display: none; /* Hide floating elements on mobile for better performance */
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 20px 15px;
+        border-radius: 15px;
+    }
+
+    .login-mascot {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+
+    .tab-buttons .btn, .sub-tab-buttons .btn {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+}

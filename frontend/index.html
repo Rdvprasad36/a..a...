@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>అ... ఆ... KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Telugu Letters Display -->
+    <div class="telugu-text" style="position: absolute; left: 50%; transform: translateX(-50%); z-index: 10; font-weight: bold; background: linear-gradient(45deg, #ff4757, #3742fa, #2f3542, #ffa502, #ff6348); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); animation: pulse 2s infinite;">
+        అ... ఆ...
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+    </style>
+
+    <!-- Intro Video -->
+    <video id="intro-video" autoplay muted playsinline style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover;">
+        <source src="WhatsApp Video 2025-11-02 at 15.19.40.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Responsive Styles -->
+    <style>
+        /* Responsive adjustments for video and text */
+        @media (max-width: 768px) {
+            #intro-video {
+                object-fit: cover; /* Ensure video covers screen on mobile */
+            }
+            .telugu-text {
+                font-size: 8vw; /* Scale font size with viewport width */
+                bottom: 10vh; /* Adjust position for mobile */
+            }
+        }
+        @media (min-width: 769px) {
+            .telugu-text {
+                font-size: 3vw; /* Larger on desktop */
+                bottom: 5vh;
+            }
+        }
+    </style>
+
+    <!-- MODALS -->
+    <!-- Custom Message Box -->
+    <div id="custom-message-modal" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="message-title">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('custom-message-modal')">&times;</button>
+            <h3 id="message-title" style="color: var(--color-orange); margin-bottom: 10px; text-align: center;">Heads Up!</h3>
+            <p id="custom-message-text" style="text-align: center; margin-bottom: 20px;">Default message.</p>
+            <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('custom-message-modal')">Got It</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

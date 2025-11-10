@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KidSpace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --color-primary: #4361ee;
+            --color-secondary: #3a0ca3;
+            --color-success: #4cc9f0;
+            --color-warning: #f72585;
+            --color-orange: #f8961e;
+            --color-light: #f8f9fa;
+            --color-dark: #212529;
+            --color-text-dark: #343a40;
+            --color-text-light: #6c757d;
+            --color-bg: #f5f7fb;
+            --color-card: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+        }
+
+        .app-screen {
+            display: none;
+            padding: 20px;
+        }
+
+        .app-screen.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header h1 {
+            color: var(--color-primary);
+            font-size: 2.2em;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+        }
+
+        .card-analytics::before {
+            background-color: var(--color-primary);
+        }
+
+        .card-content::before {
+            background-color: var(--color-success);
+        }
+
+        .card-feedback::before {
+            background-color: var(--color-warning);
+        }
+
+        .card-plan::before {
+            background-color: var(--color-orange);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .card-analytics .card-icon {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--color-primary);
+        }
+
+        .card-content .card-icon {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--color-success);
+        }
+
+        .card-feedback .card-icon {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--color-warning);
+        }
+
+        .card-plan .card-icon {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--color-orange);
+        }
+
+        .stat-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+
+        .stat-trend {
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-left: 8px;
+        }
+
+        .trend-up {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .trend-down {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            margin-right: 5px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 30px 0 20px;
+            color: var(--color-text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #users-table th,
+        #users-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        #users-table th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        #users-table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        #users-table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .chart-container {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #f5f7fb 0%, #e4e8f0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-light);
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Dashboard Screen -->
+    <div id="admin-dashboard-screen" class="app-screen active">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+            <button class="btn btn-secondary" onclick="navigate('login.html')">
+                <i class="fas fa-arrow-left"></i> Go to Login
+            </button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card card-analytics">
+                <div class="card-header">
+                    <h2 class="card-title">User Analytics</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value" id="total-users">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Active Users Today</div>
+                    <div class="stat-value" id="active-today">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">New Signups This Week</div>
+                    <div class="stat-value" id="new-signups">Loading...</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-content">
+                <div class="card-header">
+                    <h2 class="card-title">Content Analytics</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Most Popular Category</div>
+                    <div class="stat-value">Telugu Alphabets</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Activities</div>
+                    <div class="stat-value" id="total-activities">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Avg Activities/User</div>
+                    <div class="stat-value" id="avg-activities">Loading...</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-feedback">
+                <div class="card-header">
+                    <h2 class="card-title">Engagement Metrics</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Engagement Rate</div>
+                    <div class="stat-value" id="engagement-rate">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Retention Rate</div>
+                    <div class="stat-value" id="retention-rate">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Recent Feedback</div>
+                    <div class="stat-value" style="font-size: 1em; font-weight: normal;">"Great educational content for kids!"</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-plan">
+                <div class="card-header">
+                    <h2 class="card-title">Plan Management</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Current Plan</div>
+                    <div class="stat-value">Premium</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Subscription Users</div>
+                    <div class="stat-value">890 <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 15%</span></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Free Users</div>
+                    <div class="stat-value">360 <span class="stat-trend trend-down"><i class="fas fa-arrow-down"></i> 5%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> Performance Overview</h2>
+        <div class="chart-container">
+            <canvas id="engagementChart" width="400" height="200"></canvas>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-list-alt"></i> Recent Activity</h2>
+        <div class="dashboard-card" id="recent-activity-card">
+            <div class="stat-item">
+                <div class="stat-label">New user registration</div>
+                <div class="stat-value" style="font-size: 1em; font-weight: normal;">Sarah Johnson signed up for Premium plan</div>
+                <div style="color: var(--color-text-light); font-size: 0.8em;">2 hours ago</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Content update</div>
+                <div class="stat-value" style="font-size: 1em; font-weight: normal;">New "Numbers & Counting" video added</div>
+                <div style="color: var(--color-text-light); font-size: 0.8em;">5 hours ago</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">System maintenance</div>
+                <div class="stat-value" style="font-size: 1em; font-weight: normal;">Scheduled maintenance completed successfully</div>
+                <div style="color: var(--color-text-light); font-size: 0.8em;">Yesterday</div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-users"></i> Registered Users</h2>
+        <div class="dashboard-card">
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>Child Name</th>
+                        <th>Age</th>
+                        <th>Grade</th>
+                        <th>Parent Email</th>
+                        <th>Signup Date</th>
+                        <th>Photo</th>
+                        <th>Password</th>
+                        <th>Parent Dashboard Pass Code</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-envelope"></i> Parent Messages</h2>
+        <div class="dashboard-grid">
+            <div class="dashboard-card card-feedback" style="grid-column: span 2;">
+                <div class="card-header">
+                    <h2 class="card-title">Messages from Parents</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                </div>
+                <div id="parent-messages-list" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Messages will be loaded here -->
+                </div>
+            </div>
+
+            <div class="dashboard-card card-plan">
+                <div class="card-header">
+                    <h2 class="card-title">Send Message to Parent</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+                <form id="admin-message-form">
+                    <select id="message-recipient" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Nunito', sans-serif;">
+                        <option value="">Select Parent...</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <textarea id="admin-message-input" placeholder="Type your message here..." rows="4" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Nunito', sans-serif; resize: vertical;"></textarea>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-send"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Admin Dashboard Data Loading
+        document.addEventListener('DOMContentLoaded', async () => {
+            const API_BASE = 'http://localhost:3001/api';
+
+            // Load analytics data
+            async function loadAnalytics() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/analytics`);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Update user analytics
+                        const totalUsersEl = document.getElementById('total-users');
+                        const activeTodayEl = document.getElementById('active-today');
+                        const newSignupsEl = document.getElementById('new-signups');
+
+                        if (totalUsersEl) totalUsersEl.innerHTML = `${data.totalUsers || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> ${data.totalUsersTrend || 0}%</span>`;
+                        if (activeTodayEl) activeTodayEl.innerHTML = `${data.activeToday || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> ${data.activeTodayTrend || 0}%</span>`;
+                        if (newSignupsEl) newSignupsEl.innerHTML = `${data.newSignupsWeek || 0} <span class="stat-trend trend-${data.newSignupsTrend < 0 ? 'down' : 'up'}"><i class="fas fa-arrow-${data.newSignupsTrend < 0 ? 'down' : 'up'}"></i> ${Math.abs(data.newSignupsTrend || 0)}%</span>`;
+
+                        // Update content analytics
+                        const totalActivitiesEl = document.getElementById('total-activities');
+                        const avgActivitiesEl = document.getElementById('avg-activities');
+
+                        if (totalActivitiesEl) totalActivitiesEl.innerHTML = `${data.totalActivities || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 18%</span>`;
+                        if (avgActivitiesEl) avgActivitiesEl.innerHTML = `${data.avgActivitiesPerUser || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 10%</span>`;
+
+                        // Update engagement metrics
+                        const engagementRateEl = document.getElementById('engagement-rate');
+                        const retentionRateEl = document.getElementById('retention-rate');
+
+                        if (engagementRateEl) engagementRateEl.innerHTML = `${data.engagementRate || 0}% <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 8%</span>`;
+                        if (retentionRateEl) retentionRateEl.innerHTML = `${data.retentionRate || 0}% <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 15%</span>`;
+                    } else {
+                        // Show error message in the analytics section
+                        const totalUsersEl = document.getElementById('total-users');
+                        const activeTodayEl = document.getElementById('active-today');
+                        const newSignupsEl = document.getElementById('new-signups');
+
+                        if (totalUsersEl) totalUsersEl.innerHTML = 'Error loading data';
+                        if (activeTodayEl) activeTodayEl.innerHTML = 'Error loading data';
+                        if (newSignupsEl) newSignupsEl.innerHTML = 'Error loading data';
+                    }
+                } catch (error) {
+                    console.error('Failed to load analytics:', error);
+                    // Show error message in the analytics section
+                    const totalUsersEl = document.getElementById('total-users');
+                    const activeTodayEl = document.getElementById('active-today');
+                    const newSignupsEl = document.getElementById('new-signups');
+
+                    if (totalUsersEl) totalUsersEl.innerHTML = 'Error loading data';
+                    if (activeTodayEl) activeTodayEl.innerHTML = 'Error loading data';
+                    if (newSignupsEl) newSignupsEl.innerHTML = 'Error loading data';
+                }
+            }
+
+            // Load and render engagement chart
+            async function loadChart() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/chart-data`);
+                    const rawData = await response.json();
+
+                    if (response.ok && rawData) {
+                        // Transform data for Chart.js
+                        const labels = rawData.map(item => {
+                            const date = new Date(item.date);
+                            return date.toLocaleDateString('en-US', { weekday: 'short' });
+                        });
+                        const data = rawData.map(item => item.uniqueUsers || item.activities);
+
+                        const ctx = document.getElementById('engagementChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'User Engagement',
+                                    data: data,
+                                    borderColor: 'rgba(67, 97, 238, 1)',
+                                    backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Weekly User Engagement'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Failed to load chart data:', error);
+                }
+            }
+
+            // Load users table
+            async function loadUsers() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/users`);
+                    const users = await response.json();
+
+                    if (response.ok && users) {
+                        const tableBody = document.getElementById('users-table-body');
+                        if (tableBody) {
+                            tableBody.innerHTML = '';
+                            users.forEach(user => {
+                                const date = new Date(user.signupdate).toLocaleDateString();
+                                const tableRow = document.createElement('tr');
+                                tableRow.innerHTML = `
+                                    <td>${user.childname}</td>
+                                    <td>${user.age}</td>
+                                    <td>${user.grade}</td>
+                                    <td>${user.parentemail}</td>
+                                    <td>${date}</td>
+                                    <td>${user.photo ? `<img src="${user.photo}" alt="Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">` : 'No photo'}</td>
+                                    <td>Protected</td>
+                                    <td>1234</td>
+                                `;
+                                tableBody.appendChild(tableRow);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load users:', error);
+                }
+            }
+
+            // Load recent activities
+            async function loadActivities() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/activities`);
+                    const activities = await response.json();
+
+                    if (response.ok && activities) {
+                        const activityContainer = document.querySelector('#admin-dashboard-screen .dashboard-card .stat-item').parentElement;
+                        if (activityContainer) {
+                            // Clear existing hardcoded activities
+                            activityContainer.innerHTML = '';
+
+                            activities.forEach(activity => {
+                                const activityItem = document.createElement('div');
+                                activityItem.className = 'stat-item';
+
+                                const timestamp = new Date(activity.timestamp).toLocaleString();
+                                const childName = activity.users?.childname || 'Unknown User';
+
+                                let activityText = '';
+                                switch (activity.activity_type) {
+                                    case 'login':
+                                        activityText = `${childName} logged in`;
+                                        break;
+                                    case 'signup':
+                                        activityText = `${childName} signed up for an account`;
+                                        break;
+                                    case 'video_watch':
+                                        activityText = `${childName} watched a video`;
+                                        break;
+                                    case 'page_visit':
+                                        activityText = `${childName} visited ${activity.page_url}`;
+                                        break;
+                                    default:
+                                        activityText = `${childName} performed ${activity.activity_type}`;
+                                }
+
+                                activityItem.innerHTML = `
+                                    <div class="stat-label">${activityText}</div>
+                                    <div class="stat-value" style="font-size: 1em; font-weight: normal;">${activity.details ? JSON.parse(activity.details).description || '' : ''}</div>
+                                    <div style="color: var(--color-text-light); font-size: 0.8em;">${timestamp}</div>
+                                `;
+                                activityContainer.appendChild(activityItem);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load activities:', error);
+                }
+            }
+
+            // Load parent messages
+            async function loadParentMessages() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/messages`);
+                    const messages = await response.json();
+
+                    if (response.ok && messages) {
+                        const messagesContainer = document.getElementById('parent-messages-list');
+                        if (messagesContainer) {
+                            messagesContainer.innerHTML = '';
+                            if (messages.length === 0) {
+                                messagesContainer.innerHTML = '<p style="text-align: center; color: var(--color-text-light);">No messages from parents yet.</p>';
+                            } else {
+                                messages.forEach(message => {
+                                    const messageItem = document.createElement('div');
+                                    messageItem.className = 'stat-item';
+                                    messageItem.innerHTML = `
+                                        <div class="stat-label">From: ${message.users?.childname || 'Unknown'} (${message.users?.parentemail || 'Unknown'})</div>
+                                        <div class="stat-value" style="font-size: 1em; font-weight: normal;">${message.message}</div>
+                                        <div style="color: var(--color-text-light); font-size: 0.8em;">${new Date(message.timestamp).toLocaleString()}</div>
+                                    `;
+                                    messagesContainer.appendChild(messageItem);
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load parent messages:', error);
+                }
+            }
+
+            // Populate recipient dropdown
+            async function populateRecipients() {
+                try {
+                    const response = await fetch(`${API_BASE}/admin/users`);
+                    const users = await response.json();
+
+                    if (response.ok && users) {
+                        const select = document.getElementById('message-recipient');
+                        if (select) {
+                            select.innerHTML = '<option value="">Select Parent...</option>';
+                            users.forEach(user => {
+                                const option = document.createElement('option');
+                                option.value = user.id;
+                                option.textContent = `${user.childname} (${user.parentemail})`;
+                                select.appendChild(option);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load recipients:', error);
+                }
+            }
+
+            // Handle admin message form submission
+            document.getElementById('admin-message-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const recipientId = document.getElementById('message-recipient').value;
+                const message = document.getElementById('admin-message-input').value.trim();
+
+                if (!recipientId || !message) {
+                    alert('Please select a recipient and enter a message.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${API_BASE}/admin/messages`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            receiver_id: recipientId,
+                            message: message,
+                            type: 'suggestion'
+                        })
+                    });
+
+                    if (response.ok) {
+                        document.getElementById('admin-message-input').value = '';
+                        document.getElementById('message-recipient').value = '';
+                        alert('Message sent successfully!');
+                        // Reload messages to show the new message in parent dashboards
+                        loadParentMessages();
+                    } else {
+                        alert('Failed to send message. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    alert('Error sending message. Please try again.');
+                }
+            });
+
+            // Load all data
+            await Promise.all([loadAnalytics(), loadUsers(), loadActivities(), loadChart(), loadParentMessages(), populateRecipients()]);
+        });
+    </script>
+</body>
+</html>

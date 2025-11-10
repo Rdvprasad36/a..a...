@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gallery - KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Video Gallery Screen -->
+    <div id="video-gallery-screen" class="app-screen video-gallery-screen active">
+        <div class="video-gallery-header">
+            <button class="btn btn-secondary" onclick="navigate('child-home.html')" style="margin-right: 20px;">
+                &larr; Back
+            </button>
+            <h1 id="gallery-title" style="color: var(--color-orange); font-size: 2em;">Video Gallery</h1>
+        </div>
+        <div class="video-grid" id="video-gallery-grid">
+            <!-- Videos will be inserted here by JavaScript based on URL parameter -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update title based on category
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        const titles = {
+            // Original Learning Zones
+            'telugu': 'Telugu Alphabets ✍️',
+            'grammar': 'English Grammar 🅰️',
+            'stories': 'Kids Stories 📚',
+            'maths': 'Maths 🔢',
+            'history': 'History Videos 👑',
+            'science': 'Science Videos 🧪',
+            'ramayana': 'Ramayana Videos 🏹',
+            'mahabharata': 'Mahabharata Videos ⚔️',
+            // Grade-wise Learning
+            'prekg_english': 'Pre KG English 🅰️',
+            'prekg_gk': 'Pre KG GK 🌍',
+            'prekg_science': 'Pre KG Science 🧪',
+            'prekg_telugu': 'Pre KG Telugu ✍️',
+            'prekg_rhymes': 'Pre KG Rhymes 🎵',
+            'lkg_english': 'LKG English 🅰️',
+            'lkg_maths': 'LKG Maths 🔢',
+            'lkg_science': 'LKG Science 🧪',
+            'lkg_gk': 'LKG GK 🌍',
+            'lkg_creative': 'LKG Creative Skills 🎨',
+            'lkg_rhymes': 'LKG Rhymes 🎵',
+            'ukg_english': 'UKG English 🅰️',
+            'ukg_maths': 'UKG Maths 🔢',
+            'ukg_science': 'UKG Science 🧪',
+            'ukg_gk': 'UKG GK 🌍',
+            'ukg_creative': 'UKG Creative Skills 🎨'
+        };
+        if (category && titles[category]) {
+            document.getElementById('gallery-title').textContent = titles[category];
+            // Use a default color for grade-wise categories
+            const colorMap = {
+                'telugu': 'cream',
+                'grammar': 'grammar-blue',
+                'stories': 'soft-green',
+                'maths': 'maths-yellow',
+                'history': 'history-lavender',
+                'science': 'science-green',
+                'ramayana': 'epic-red',
+                'mahabharata': 'orange'
+            };
+            const color = colorMap[category] || 'orange';
+            document.getElementById('gallery-title').style.color = getComputedStyle(document.documentElement).getPropertyValue(`--color-${color}`);
+        }
+    </script>
+</body>
+</html>

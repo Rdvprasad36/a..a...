@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="dino-game-container">
+            <canvas id="dino-canvas" width="400" height="150"></canvas>
+        </div>
+        <div id="login-screen" class="app-screen active">
+            <div class="login-card">
+                <div class="login-mascot">
+                    👶
+                </div>
+
+            <div class="tab-buttons">
+                <button class="btn active-tab" onclick="switchTab('login')">Parent & Child</button>
+                <button class="btn" onclick="switchTab('admin')">Admin</button>
+            </div>
+
+            <!-- Parent & Child Login/Signup Form -->
+            <div id="parent-child-form" class="auth-form">
+                <div class="sub-tab-buttons">
+                    <button class="btn active-tab" onclick="switchSubTab('login')">Login</button>
+                    <button class="btn" onclick="switchSubTab('signup')">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form">
+                    <input type="email" placeholder="Email" required id="login-email">
+                    <input type="password" placeholder="Password" required id="login-password">
+                    <p id="login-error-message" style="color: red; text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;">Invalid credentials.</p>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Log In
+                    </button>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="signup-form" class="auth-form" style="display: none;">
+                    <div class="photo-upload-container">
+                        <div class="photo-preview" id="photo-preview">
+                            👶
+                        </div>
+                        <input type="file" id="photo-upload" accept="image/*" style="display: none;" onchange="previewPhoto(event)">
+                        <label for="photo-upload" class="photo-upload-btn">Upload Photo</label>
+                    </div>
+
+                    <input type="text" placeholder="Child's Name" required id="child-name">
+                    <input type="number" placeholder="Child's Age" required id="child-age" min="3" max="12">
+                    <select id="child-grade" required>
+                        <option value="">Select Grade</option>
+                        <option value="pre-k">Pre-K</option>
+                        <option value="kindergarten">Kindergarten</option>
+                        <option value="1st">1st Grade</option>
+                        <option value="2nd">2nd Grade</option>
+                        <option value="3rd">3rd Grade</option>
+                        <option value="4th">4th Grade</option>
+                        <option value="5th">5th Grade</option>
+                    </select>
+                    <input type="email" placeholder="Parent's Email" required id="parent-email">
+                    <input type="password" placeholder="Create Password" required id="signup-password">
+                    <input type="password" placeholder="Confirm Password" required id="confirm-password">
+                    <p id="signup-error-message" style="color: red; text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;">Passwords don't match.</p>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Admin Login Form -->
+            <form id="admin-form" class="auth-form" style="display: none;">
+                <input type="email" placeholder="Admin Email" required id="admin-email">
+                <input type="password" placeholder="Admin Password" required id="admin-password">
+                <p id="admin-error-message" style="color: red; text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;">Invalid admin credentials.</p>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Admin Login
+                </button>
+            </form>
+
+            <div class="forgot-links">
+                <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                <a href="#" onclick="showForgotParentGate()">Forgot Parent Gate?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Elements Animation -->
+    <div class="floating-elements">
+        <div class="floating-element" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDMuNUMxMy44IDMuNSAzLjUgMTMuOCAzLjUgMzAuNUMzLjUgNDYuMiAxMy44IDU2LjUgMzAgNTYuNUM0Ni4yIDU2LjUgNTYuNSA0Ni4yIDU2LjUgMzAuNUM1Ni41IDEzLjggNDYuMiAzLjUgMzAgMy41Wk0zMCA0NS41QzIyLjIgNDUuNSAxNS41IDM4LjggMTUuNSAzMEMxNS41IDIxLjIgMjIuMiAxNC41IDMwIDE0LjVDMzcuOCAxNC41IDQ0LjUgMjEuMiA0NC41IDMwQzQ0LjUgMzguOCA0NC41IDQ1LjUgMzAgNDUuNVoiIGZpbGw9IiNGRjZCNkIi8+Cjwvc3ZnPgo='); top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDIwQzIyIDIwIDIwIDIyIDIwIDMwQzIwIDM4IDIyIDQwIDMwIDQwQzM4IDQwIDQwIDM4IDQwIDMwQzQwIDIyIDM4IDIwIDMwIDIwWk0zMCA0NUMyMS4yIDQ1IDE0IDM3LjggMTQgMzBDMTQgMjIuMiAyMS4yIDE1IDMwIDE1QzM4LjggMTUgNDYgMjIuMiA0NiAzMEM0NiAzNy44IDM4LjggNDUgMzAgNDVaIiBmaWxsPSIjRkI3MjI0Ii8+Cjwvc3ZnPgo='); top: 20%; right: 15%; animation-delay: 2s;"></div>
+        <div class="floating-element" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDMuNUMxMy44IDMuNSAzLjUgMTMuOCAzLjUgMzAuNUMzLjUgNDYuMiAxMy44IDU2LjUgMzAgNTYuNUM0Ni4yIDU2LjUgNTYuNSA0Ni4yIDU2LjUgMzAuNUM1Ni41IDEzLjggNDYuMiAzLjUgMzAgMy41Wk0zMCA0NS41QzIyLjIgNDUuNSAxNS41IDM4LjggMTUuNSAzMEMxNS41IDIxLjIgMjIuMiAxNC41IDMwIDE0LjVDMzcuOCAxNC41IDQ0LjUgMjEuMiA0NC41IDMwQzQ0LjUgMzguOCA0NC41IDQ1LjUgMzAgNDUuNVoiIGZpbGw9IiMxMEI5ODEiLz4KPC9zdmc+'); top: 50%; left: 20%; animation-delay: 4s;"></div>
+        <div class="floating-element" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDIwQzIyIDIwIDIwIDIyIDIwIDMwQzIwIDM4IDIyIDQwIDMwIDQwQzM4IDQwIDQwIDM4IDQwIDMwQzQwIDIyIDM4IDIwIDMwIDIwWk0zMCA0NUMyMS4yIDQ1IDE0IDM3LjggMTQgMzBDMTQgMjIuMiAyMS4yIDE1IDMwIDE1QzM4LjggMTUgNDYgMjIuMiA0NiAzMEM0NiAzNy44IDM4LjggNDUgMzAgNDVaIiBmaWxsPSIjRjU5RTBCIi8+Cjwvc3ZnPgo='); bottom: 20%; right: 10%; animation-delay: 6s;"></div>
+        <div class="floating-element" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMwIDMuNUMxMy44IDMuNSAzLjUgMTMuOCAzLjUgMzAuNUMzLjUgNDYuMiAxMy44IDU2LjUgMzAgNTYuNUM0Ni4yIDU2LjUgNTYuNSA0Ni4yIDU2LjUgMzAuNUM1Ni41IDEzLjggNDYuMiAzLjUgMzAgMy41Wk0zMCA0NS41QzIyLjIgNDUuNSAxNS41IDM4LjggMTUuNSAzMEMxNS41IDIxLjIgMjIuMiAxNC41IDMwIDE0LjVDMzcuOCAxNC41IDQ0LjUgMjEuMiA0NC41IDMwQzQ0LjUgMzguOCA0NC41IDQ1LjUgMzAgNDUuNVoiIGZpbGw9IiM4QjVDRjYiLz4KPC9zdmc+'); top: 70%; left: 50%; animation-delay: 8s;"></div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Custom Message Box -->
+    <div id="custom-message-modal" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="message-title">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('custom-message-modal')">&times;</button>
+            <h3 id="message-title" style="color: var(--color-orange); margin-bottom: 10px; text-align: center;">Heads Up!</h3>
+            <p id="custom-message-text" style="text-align: center; margin-bottom: 20px;">Default message.</p>
+            <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('custom-message-modal')">Got It</button>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="custom-modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('forgot-password-modal')">&times;</button>
+            <h3 style="color: var(--color-orange); margin-bottom: 10px; text-align: center;">Reset Password</h3>
+            <p style="text-align: center; margin-bottom: 15px;">Enter your email to receive password reset instructions.</p>
+
+            <input type="email" id="reset-email" placeholder="Enter your email" style="text-align: center;">
+            <p id="reset-success" style="color: green; text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;">Reset instructions sent!</p>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="handlePasswordReset()">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- Forgot Parent Gate Modal -->
+    <div id="forgot-parentgate-modal" class="custom-modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('forgot-parentgate-modal')">&times;</button>
+            <h3 style="color: var(--color-orange); margin-bottom: 10px; text-align: center;">Reset Parent Gate</h3>
+            <p style="text-align: center; margin-bottom: 15px;">Enter your parent email to reset the Parent Gate passcode.</p>
+
+            <input type="email" id="parentgate-email" placeholder="Enter parent email" style="text-align: center;">
+            <p id="parentgate-success" style="color: green; text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;">Reset instructions sent!</p>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="handleParentGateReset()">Send Reset Link</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script>
+        // Dino Game Implementation - Auto-playing with beautiful colors
+        const canvas = document.getElementById('dino-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game variables
+        let dino = { x: 50, y: 100, width: 40, height: 40, velocityY: 0, onGround: true };
+        let obstacles = [];
+        let gameSpeed = 2;
+        let jumpTimer = 0;
+
+        // Beautiful colors
+        const colors = {
+            sky: '#87CEEB',
+            ground: '#90EE90',
+            dino: '#FF6B6B',
+            dinoEyes: '#FFFFFF',
+            obstacle: '#4ECDC4',
+            cloud: '#FFFFFF'
+        };
+
+        // Dino sprite with colors
+        function drawDino() {
+            // Body
+            ctx.fillStyle = colors.dino;
+            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+
+            // Eyes
+            ctx.fillStyle = colors.dinoEyes;
+            ctx.fillRect(dino.x + 25, dino.y + 10, 6, 6);
+            ctx.fillRect(dino.x + 10, dino.y + 10, 6, 6);
+
+            // Pupils
+            ctx.fillStyle = '#000';
+            ctx.fillRect(dino.x + 27, dino.y + 12, 2, 2);
+            ctx.fillRect(dino.x + 12, dino.y + 12, 2, 2);
+
+            // Legs (simple animation)
+            ctx.fillStyle = colors.dino;
+            ctx.fillRect(dino.x + 5, dino.y + 35, 8, 5);
+            ctx.fillRect(dino.x + 27, dino.y + 35, 8, 5);
+        }
+
+        // Obstacle class with colors
+        class Obstacle {
+            constructor() {
+                this.x = canvas.width;
+                this.y = 110;
+                this.width = 25;
+                this.height = 30;
+                this.color = colors.obstacle;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+
+                // Add some spikes for cactus effect
+                ctx.fillStyle = '#228B22';
+                ctx.fillRect(this.x + 5, this.y - 5, 3, 8);
+                ctx.fillRect(this.x + 12, this.y - 8, 3, 11);
+                ctx.fillRect(this.x + 17, this.y - 6, 3, 9);
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+
+        // Cloud class for background
+        class Cloud {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * 50 + 10;
+                this.speed = Math.random() * 0.5 + 0.2;
+            }
+
+            draw() {
+                ctx.fillStyle = colors.cloud;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
+                ctx.arc(this.x + 20, this.y, 20, 0, Math.PI * 2);
+                ctx.arc(this.x + 40, this.y, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            update() {
+                this.x -= this.speed;
+                if (this.x < -60) {
+                    this.x = canvas.width + 60;
+                    this.y = Math.random() * 50 + 10;
+                }
+            }
+        }
+
+        // Create clouds
+        let clouds = [];
+        for (let i = 0; i < 3; i++) {
+            clouds.push(new Cloud());
+        }
+
+        // Game functions
+        function autoJump() {
+            // Auto jump when obstacle is close
+            let shouldJump = false;
+            obstacles.forEach(obstacle => {
+                if (obstacle.x > dino.x && obstacle.x < dino.x + 150 && dino.onGround) {
+                    shouldJump = true;
+                }
+            });
+
+            // Random jumps occasionally
+            if (Math.random() < 0.005 && dino.onGround) {
+                shouldJump = true;
+            }
+
+            if (shouldJump) {
+                dino.velocityY = -12;
+                dino.onGround = false;
+            }
+        }
+
+        function updateDino() {
+            dino.velocityY += 0.6; // gravity
+            dino.y += dino.velocityY;
+
+            if (dino.y >= 100) {
+                dino.y = 100;
+                dino.onGround = true;
+                dino.velocityY = 0;
+            }
+        }
+
+        function spawnObstacle() {
+            if (Math.random() < 0.008) {
+                obstacles.push(new Obstacle());
+            }
+        }
+
+        function updateObstacles() {
+            obstacles.forEach((obstacle, index) => {
+                obstacle.update();
+
+                // Remove off-screen obstacles
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(index, 1);
+                }
+            });
+        }
+
+        function drawSky() {
+            // Gradient sky
+            let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, colors.sky);
+            gradient.addColorStop(1, '#E0F6FF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawGround() {
+            ctx.fillStyle = colors.ground;
+            ctx.fillRect(0, 140, canvas.width, 10);
+        }
+
+        function gameLoop() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background
+            drawSky();
+
+            // Update and draw clouds
+            clouds.forEach(cloud => {
+                cloud.update();
+                cloud.draw();
+            });
+
+            // Update game
+            autoJump();
+            updateDino();
+            spawnObstacle();
+            updateObstacles();
+
+            // Draw everything
+            drawGround();
+            drawDino();
+            obstacles.forEach(obstacle => obstacle.draw());
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+
+        // Tab switching functions
+        function switchTab(tab) {
+            const parentChildForm = document.getElementById('parent-child-form');
+            const adminForm = document.getElementById('admin-form');
+            const tabButtons = document.querySelectorAll('.tab-buttons .btn');
+
+            if (tab === 'login') {
+                parentChildForm.style.display = 'block';
+                adminForm.style.display = 'none';
+                tabButtons[0].classList.add('active-tab');
+                tabButtons[1].classList.remove('active-tab');
+            } else if (tab === 'admin') {
+                parentChildForm.style.display = 'none';
+                adminForm.style.display = 'block';
+                tabButtons[0].classList.remove('active-tab');
+                tabButtons[1].classList.add('active-tab');
+            }
+        }
+
+        function switchSubTab(subTab) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const subTabButtons = document.querySelectorAll('.sub-tab-buttons .btn');
+
+            if (subTab === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                subTabButtons[0].classList.add('active-tab');
+                subTabButtons[1].classList.remove('active-tab');
+            } else if (subTab === 'signup') {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                subTabButtons[0].classList.remove('active-tab');
+                subTabButtons[1].classList.add('active-tab');
+            }
+        }
+
+        // Photo upload preview
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('photo-preview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Photo preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Modal functions
+        function showForgotPassword() {
+            document.getElementById('forgot-password-modal').style.display = 'flex';
+        }
+
+        function showForgotParentGate() {
+            document.getElementById('forgot-parentgate-modal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Form submission handlers
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorElement = document.getElementById('login-error-message');
+
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = data.error || 'Login failed';
+                    return;
+                }
+
+                errorElement.style.display = 'none';
+                localStorage.setItem('kidspace_current_user', JSON.stringify(data.user));
+                window.location.href = 'child-home.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                errorElement.style.display = 'block';
+                errorElement.textContent = 'Login failed. Please try again.';
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorElement = document.getElementById('signup-error-message');
+
+            if (password !== confirmPassword) {
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            errorElement.style.display = 'none';
+
+            const parentEmail = document.getElementById('parent-email').value;
+
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: parentEmail,
+                        password: password,
+                        childName: document.getElementById('child-name').value,
+                        age: parseInt(document.getElementById('child-age').value),
+                        grade: document.getElementById('child-grade').value,
+                        photo: document.getElementById('photo-preview').querySelector('img')?.src || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert('Signup failed: ' + (data.error || 'Unknown error'));
+                    return;
+                }
+
+                localStorage.setItem('kidspace_current_user', JSON.stringify(data.user));
+                alert('Account created successfully!');
+                window.location.href = 'child-home.html';
+            } catch (error) {
+                console.error('Signup error:', error);
+                alert('Signup failed. Please try again.');
+            }
+        });
+
+        document.getElementById('admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const errorElement = document.getElementById('admin-error-message');
+
+            if (email === 'aaavignan@gmail.com' && password === 'Vignan@123') {
+                errorElement.style.display = 'none';
+                localStorage.setItem('kidspace_admin_logged_in', 'true');
+                localStorage.setItem('kidspace_admin_email', email);
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                errorElement.style.display = 'block';
+            }
+        });
+
+        // Password reset handlers
+        function handlePasswordReset() {
+            const email = document.getElementById('reset-email').value;
+            if (email) {
+                document.getElementById('reset-success').style.display = 'block';
+                setTimeout(() => {
+                    closeModal('forgot-password-modal');
+                    alert('Password reset instructions have been sent to your email.');
+                }, 1000);
+            }
+        }
+
+        function handleParentGateReset() {
+            const email = document.getElementById('parentgate-email').value;
+            if (email) {
+                document.getElementById('parentgate-success').style.display = 'block';
+                setTimeout(() => {
+                    closeModal('forgot-parentgate-modal');
+                    alert('Parent Gate reset instructions have been sent to your email.');
+                }, 1000);
+            }
+        }
+
+        // Initialize default state
+        switchSubTab('login');
+        switchTab('login');
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

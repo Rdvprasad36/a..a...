@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard - KidSpace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Parent Dashboard Screen -->
+    <div id="parent-dashboard-screen" class="app-screen active">
+        <!-- Professional Header -->
+        <div class="dashboard-header-professional">
+            <div class="header-content-professional">
+                <div class="logo-section">
+                    <i class="fas fa-shield-alt" style="font-size: 2em; color: var(--color-orange);"></i>
+                    <div>
+                        <h1 class="dashboard-title">Parent Dashboard</h1>
+                        <p class="dashboard-subtitle">Monitor & Support Your Child's Learning Journey</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-professional btn-secondary-professional" onclick="navigate('child-home.html')">
+                        <i class="fas fa-home"></i> Back to Child Home
+                    </button>
+                    <button class="btn-professional btn-primary-professional" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview Cards -->
+        <div class="stats-overview">
+            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="stat-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="streak-number">0</h3>
+                    <p>Day Streak</p>
+                </div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="total-logins">0</h3>
+                    <p>Total Logins</p>
+                </div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="activities-count">0</h3>
+                    <p>Activities Done</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Child Details Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-child" style="color: var(--color-orange); margin-right: 10px;"></i>
+                        Child Profile
+                    </h3>
+                    <div class="card-icon-professional">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+                <div id="parent-child-details" class="card-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Recent Activities Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-history" style="color: var(--color-soft-green); margin-right: 10px;"></i>
+                        Recent Activities
+                    </h3>
+                    <div class="card-icon-professional" style="background: linear-gradient(135deg, var(--color-soft-green), #32d74b);">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                </div>
+                <div id="recent-activities" class="card-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Messages from Admin Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-envelope" style="color: var(--color-pastel-blue); margin-right: 10px;"></i>
+                        Messages from Admin
+                    </h3>
+                    <div class="card-icon-professional" style="background: linear-gradient(135deg, var(--color-pastel-blue), #5ac8fa);">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+                <div id="admin-messages-list" class="card-content messages-container">
+                    <!-- Messages will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Send Message Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-paper-plane" style="color: var(--color-light-pink); margin-right: 10px;"></i>
+                        Send Message to Admin
+                    </h3>
+                    <div class="card-icon-professional" style="background: linear-gradient(135deg, var(--color-light-pink), #ff6b8b);">
+                        <i class="fas fa-reply"></i>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="form-group-professional">
+                        <textarea id="parent-message-input" class="form-input-professional form-textarea-professional"
+                                placeholder="Type your message to the admin here..." rows="4"></textarea>
+                    </div>
+                    <button class="btn-professional btn-success-professional" onclick="sendMessageToAdmin()">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Daily Learning Plan Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-calendar-day" style="color: var(--color-elearning-teal); margin-right: 10px;"></i>
+                        Today's Learning Plan
+                    </h3>
+                    <div class="card-icon-professional" style="background: linear-gradient(135deg, var(--color-elearning-teal), #2ec4b6);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div id="daily-plan" class="card-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Parent Feedback Card -->
+            <div class="dashboard-card-professional">
+                <div class="card-header-professional">
+                    <h3 class="card-title-professional">
+                        <i class="fas fa-comments" style="color: var(--color-story-purple); margin-right: 10px;"></i>
+                        Feedback & Progress
+                    </h3>
+                    <div class="card-icon-professional" style="background: linear-gradient(135deg, var(--color-story-purple), #af52de);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div id="parent-feedback" class="card-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Messages List (hidden container for JS) -->
+        <div id="parent-messages-list" style="display: none;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('kidspace_current_user'));
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // Load parent dashboard data on page load
+        document.addEventListener('DOMContentLoaded', loadParentDashboard);
+
+        const loadParentDashboard = async () => {
+            const currentUser = JSON.parse(localStorage.getItem('kidspace_current_user'));
+            if (!currentUser) return;
+
+            try {
+                // Load parent/child details
+                const detailsResponse = await fetch(`http://localhost:3001/api/parent/details/${currentUser.id}`);
+                const details = await detailsResponse.json();
+                document.getElementById('parent-child-details').innerHTML = `
+                    <div class="profile-info">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span><strong>Name:</strong> ${details.childname}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span><strong>Age:</strong> ${details.age} years</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span><strong>Grade:</strong> ${details.grade}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-envelope"></i>
+                                <span><strong>Parent Email:</strong> ${details.parentemail}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span><strong>Member Since:</strong> ${new Date(details.signupdate).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Load streak and update stats
+                const streakResponse = await fetch(`http://localhost:3001/api/parent/streak/${currentUser.id}`);
+                const streak = await streakResponse.json();
+                document.getElementById('streak-number').textContent = streak.current_streak || 0;
+                document.getElementById('total-logins').textContent = streak.total_logins || 0;
+
+                // Load recent activities and update count
+                const activitiesResponse = await fetch(`http://localhost:3001/api/parent/activities/${currentUser.id}`);
+                const activities = await activitiesResponse.json();
+                document.getElementById('activities-count').textContent = activities.length || 0;
+
+                document.getElementById('recent-activities').innerHTML = `
+                    <div class="activities-timeline">
+                        ${activities.length > 0 ? activities.slice(0, 5).map(activity => `
+                            <div class="timeline-item">
+                                <div class="timeline-marker">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="activity-title">${activity.activity}</div>
+                                    <div class="activity-meta">
+                                        <span><i class="fas fa-clock"></i> ${new Date(activity.timestamp).toLocaleString()}</span>
+                                        <span><i class="fas fa-hourglass-half"></i> ${activity.duration_minutes || 0} min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') : '<div class="no-data"><i class="fas fa-inbox"></i><p>No recent activities yet</p></div>'}
+                    </div>
+                `;
+
+                // Load messages
+                const messagesResponse = await fetch(`http://localhost:3001/api/parent/messages/${currentUser.id}`);
+                const messages = await messagesResponse.json();
+                document.getElementById('admin-messages-list').innerHTML = messages.length > 0 ? messages.map(message => `
+                    <div class="message-bubble ${message.is_from_admin ? 'admin-message' : 'parent-message'}">
+                        <div class="message-header">
+                            <span class="message-sender">${message.is_from_admin ? 'Admin' : 'You'}</span>
+                            <span class="message-time">${new Date(message.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="message-content">${message.message}</div>
+                    </div>
+                `).join('') : '<div class="no-data"><i class="fas fa-envelope-open"></i><p>No messages yet</p></div>';
+
+                // Load daily plan
+                const planResponse = await fetch(`http://localhost:3001/api/parent/plan/${currentUser.id}`);
+                const plan = await planResponse.json();
+                document.getElementById('daily-plan').innerHTML = `
+                    <div class="plan-content">
+                        ${plan.plan_details ? `
+                            <div class="plan-text">${plan.plan_details}</div>
+                        ` : `
+                            <div class="no-data">
+                                <i class="fas fa-calendar-day"></i>
+                                <p>No learning plan set for today</p>
+                            </div>
+                        `}
+                    </div>
+                `;
+
+                // Load feedback
+                const feedbackResponse = await fetch(`http://localhost:3001/api/parent/feedback/${currentUser.id}`);
+                const feedback = await feedbackResponse.json();
+                document.getElementById('parent-feedback').innerHTML = `
+                    <div class="feedback-timeline">
+                        ${feedback.length > 0 ? feedback.map(item => `
+                            <div class="feedback-item-modern">
+                                <div class="feedback-icon">
+                                    <i class="fas fa-comment-dots"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>${item.feedback}</p>
+                                    <span class="feedback-date">${new Date(item.timestamp).toLocaleString()}</span>
+                                </div>
+                            </div>
+                        `).join('') : '<div class="no-data"><i class="fas fa-comments"></i><p>No feedback available yet</p></div>'}
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                alert('Failed to load dashboard data. Please try again.');
+            }
+        };
+
+        // Send message to admin
+        const sendMessageToAdmin = async () => {
+            const messageInput = document.getElementById('parent-message-input');
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert('Please enter a message.');
+                return;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('kidspace_current_user'));
+            if (!currentUser) {
+                alert('User not found. Please log in again.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3001/api/parent/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sender_id: currentUser.id, message })
+                });
+
+                if (response.ok) {
+                    messageInput.value = '';
+                    alert('Message sent successfully!');
+                    // Reload messages
+                    loadParentDashboard();
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        };
+
+        // Logout function
+        const logout = () => {
+            localStorage.removeItem('kidspace_current_user');
+            window.location.href = 'login.html';
+        };
+
+        // Navigate function
+        const navigate = (url) => {
+            window.location.href = url;
+        };
+    </script>
+</body>
+</html>
