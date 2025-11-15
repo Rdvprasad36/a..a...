@@ -1,10 +1,12 @@
-# KidSpace - Educational Platform for Kids
+# <img src="logo.jpeg" alt="అ... ఆ... Logo" width="200" height="auto">
+
+# అ... ఆ... - Educational Platform for Kids
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-2.38+-blue.svg)](https://supabase.com/)
 
-KidSpace is a comprehensive educational platform designed specifically for children, featuring interactive learning activities, parental oversight, and administrative management tools. Built with modern web technologies and powered by Supabase for backend services.
+అ... ఆ... is a comprehensive educational platform designed specifically for children, featuring interactive learning activities, parental oversight, and administrative management tools. Built with modern web technologies and powered by Supabase for backend services.
 
 ## 🌟 Features
 

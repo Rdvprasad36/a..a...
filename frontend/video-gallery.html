@@ -6,69 +6,211 @@
     <title>Video Gallery - KidSpace</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Video Gallery Styles */
+        .video-gallery-screen {
+            background: linear-gradient(135deg, #FFF7E6 0%, #FFE0B2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .video-gallery-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .video-gallery-header button {
+            position: absolute;
+            left: 0;
+            background: #FF8A00;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .video-gallery-header button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-gallery-header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #FF8A00;
+            margin: 0;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+        .video-play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #FF8A00;
+            color: white;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: transform 0.2s;
+        }
+
+        .video-play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .no-videos {
+            text-align: center;
+            font-size: 1.5em;
+            color: #666;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .video-gallery-header h1 {
+                font-size: 1.8em;
+            }
+
+            .video-iframe {
+                height: 180px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Video Gallery Screen -->
     <div id="video-gallery-screen" class="app-screen video-gallery-screen active">
         <div class="video-gallery-header">
-            <button class="btn btn-secondary" onclick="navigate('child-home.html')" style="margin-right: 20px;">
-                &larr; Back
+            <button onclick="goBack()">
+                &larr; Back to Home
             </button>
-            <h1 id="gallery-title" style="color: var(--color-orange); font-size: 2em;">Video Gallery</h1>
+            <h1 id="gallery-title">Video Gallery</h1>
         </div>
         <div class="video-grid" id="video-gallery-grid">
             <!-- Videos will be inserted here by JavaScript based on URL parameter -->
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Video Modal -->
+    <div id="video-modal" class="custom-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('video-modal')">&times;</button>
+            <iframe id="modal-video-iframe" class="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script src="videos.js"></script>
+    <script src="../script.js"></script>
     <script>
-        // Update title based on category
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
-        const titles = {
-            // Original Learning Zones
-            'telugu': 'Telugu Alphabets ✍️',
-            'grammar': 'English Grammar 🅰️',
-            'stories': 'Kids Stories 📚',
-            'maths': 'Maths 🔢',
-            'history': 'History Videos 👑',
-            'science': 'Science Videos 🧪',
-            'ramayana': 'Ramayana Videos 🏹',
-            'mahabharata': 'Mahabharata Videos ⚔️',
-            // Grade-wise Learning
-            'prekg_english': 'Pre KG English 🅰️',
-            'prekg_gk': 'Pre KG GK 🌍',
-            'prekg_science': 'Pre KG Science 🧪',
-            'prekg_telugu': 'Pre KG Telugu ✍️',
-            'prekg_rhymes': 'Pre KG Rhymes 🎵',
-            'lkg_english': 'LKG English 🅰️',
-            'lkg_maths': 'LKG Maths 🔢',
-            'lkg_science': 'LKG Science 🧪',
-            'lkg_gk': 'LKG GK 🌍',
-            'lkg_creative': 'LKG Creative Skills 🎨',
-            'lkg_rhymes': 'LKG Rhymes 🎵',
-            'ukg_english': 'UKG English 🅰️',
-            'ukg_maths': 'UKG Maths 🔢',
-            'ukg_science': 'UKG Science 🧪',
-            'ukg_gk': 'UKG GK 🌍',
-            'ukg_creative': 'UKG Creative Skills 🎨'
-        };
-        if (category && titles[category]) {
-            document.getElementById('gallery-title').textContent = titles[category];
-            // Use a default color for grade-wise categories
-            const colorMap = {
-                'telugu': 'cream',
-                'grammar': 'grammar-blue',
-                'stories': 'soft-green',
-                'maths': 'maths-yellow',
-                'history': 'history-lavender',
-                'science': 'science-green',
-                'ramayana': 'epic-red',
-                'mahabharata': 'orange'
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const titles = {
+                telugu: 'Telugu Alphabets ✍️',
+                grammar: 'English Grammar 🅰️',
+                stories: 'Kids Stories 📚',
+                maths: 'Maths 🔢',
+                science: 'Science Videos 🧪',
+                gk: 'General Knowledge 🌍',
+                rhymes: 'Rhymes 🎵',
+                creative: 'Creative Skills 🎨'
             };
-            const color = colorMap[category] || 'orange';
-            document.getElementById('gallery-title').style.color = getComputedStyle(document.documentElement).getPropertyValue(`--color-${color}`);
+
+            // Set the title based on the category
+            if (category && titles[category]) {
+                document.getElementById('gallery-title').textContent = titles[category];
+            } else {
+                document.getElementById('gallery-title').textContent = 'Video Gallery';
+            }
+
+            // Load videos for the category
+            loadVideos(category);
+        });
+
+        function loadVideos(category) {
+            const videos = getVideosForCategory(category);
+            const grid = document.getElementById('video-gallery-grid');
+
+            if (videos.length === 0) {
+                grid.innerHTML = '<div class="no-videos">No videos available for this category yet. Coming soon! 🎬</div>';
+                return;
+            }
+
+            grid.innerHTML = videos.map(video => `
+                <div class="video-item">
+                    <iframe class="video-iframe" 
+                            src="${video.url}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goBack() {
+            // Navigate back to the child home page
+            window.location.href = 'child-home.html';
         }
     </script>
 </body>

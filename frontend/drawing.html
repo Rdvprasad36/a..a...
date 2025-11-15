@@ -6,22 +6,421 @@
     <title>Drawing - KidSpace</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Drawing Tools Styles */
+        .drawing-tools {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 8px;
+        }
+
+        .color-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-btn.active {
+            border-color: #333;
+            transform: scale(1.2);
+        }
+
+        .brush-size-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brush-size-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--color-orange);
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .brush-size-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .brush-size-btn.active {
+            background: white;
+            color: var(--color-orange);
+            border-color: var(--color-orange);
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--color-soft-green), var(--color-pastel-blue));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-btn.clear {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+
+        .canvas-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .canvas-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #999;
+            font-size: 1.2em;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .canvas-placeholder i {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .drawing-tools {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .tool-group {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .color-palette {
+                justify-content: center;
+            }
+
+            .canvas-container {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Drawing Screen -->
     <div id="drawing-screen" class="app-screen active">
-        <div class="dashboard-header" style="justify-content: flex-start; max-width: 800px; margin: 0 auto 30px;">
+        <div class="dashboard-header" style="justify-content: flex-start; max-width: 800px; margin: 0 auto 20px;">
             <button class="btn btn-secondary" onclick="navigate('child-home.html')" style="margin-right: 20px;">
                 &larr; Back
             </button>
             <h1 style="color: var(--color-orange); font-size: 2em;">Drawing Canvas 🎨</h1>
         </div>
 
-        <div style="flex-grow: 1; display: flex; align-items: stretch; justify-content: center; max-width: 800px; width: 100%; margin: 0 auto;">
+        <!-- Drawing Tools -->
+        <div class="drawing-tools">
+            <!-- Color Palette -->
+            <div class="tool-group">
+                <span style="font-size: 1.2em; color: var(--color-text-dark);">🎨</span>
+                <div class="color-palette">
+                    <button class="color-btn" style="background: #000000;" data-color="#000000"></button>
+                    <button class="color-btn active" style="background: #FF8A00;" data-color="#FF8A00"></button>
+                    <button class="color-btn" style="background: #FF0000;" data-color="#FF0000"></button>
+                    <button class="color-btn" style="background: #00FF00;" data-color="#00FF00"></button>
+                    <button class="color-btn" style="background: #0000FF;" data-color="#0000FF"></button>
+                    <button class="color-btn" style="background: #FFFF00;" data-color="#FFFF00"></button>
+                    <button class="color-btn" style="background: #FF00FF;" data-color="#FF00FF"></button>
+                    <button class="color-btn" style="background: #00FFFF;" data-color="#00FFFF"></button>
+                </div>
+            </div>
+
+            <!-- Brush Size -->
+            <div class="tool-group">
+                <span style="font-size: 1.2em; color: var(--color-text-dark);">✏️</span>
+                <div class="brush-size-container">
+                    <button class="brush-size-btn active" data-size="5">S</button>
+                    <button class="brush-size-btn" data-size="10">M</button>
+                    <button class="brush-size-btn" data-size="20">L</button>
+                    <button class="brush-size-btn" data-size="30">XL</button>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="tool-group">
+                <button class="action-btn clear" onclick="clearCanvas()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button class="action-btn" onclick="saveDrawing()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="canvas-container">
+            <div class="canvas-placeholder" id="canvas-placeholder">
+                <i class="fas fa-palette"></i>
+                <div>Start Drawing Here!</div>
+                <div style="font-size: 0.8em; margin-top: 5px;">Tap or click to begin</div>
+            </div>
             <canvas id="drawing-canvas"></canvas>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
+    <script>
+        // Drawing functionality enhancements
+        let currentColor = '#FF8A00';
+        let currentBrushSize = 10;
+
+        // Initialize drawing tools
+        document.addEventListener('DOMContentLoaded', function() {
+            // Color selection
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentColor = this.dataset.color;
+                });
+            });
+
+            // Brush size selection
+            document.querySelectorAll('.brush-size-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.brush-size-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentBrushSize = parseInt(this.dataset.size);
+                });
+            });
+        });
+
+        // Enhanced drawing functions
+        function clearCanvas() {
+            const canvas = document.getElementById('drawing-canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Show placeholder again
+            document.getElementById('canvas-placeholder').style.display = 'block';
+
+            // Add success animation
+            const clearBtn = document.querySelector('.action-btn.clear');
+            clearBtn.innerHTML = '<i class="fas fa-check"></i> Cleared!';
+            clearBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            setTimeout(() => {
+                clearBtn.innerHTML = '<i class="fas fa-trash"></i> Clear';
+                clearBtn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+            }, 1000);
+        }
+
+        function saveDrawing() {
+            const canvas = document.getElementById('drawing-canvas');
+            if (!canvas) return;
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'my-drawing.png';
+            link.href = canvas.toDataURL();
+            link.click();
+
+            // Show success message
+            const saveBtn = document.querySelector('.action-btn:not(.clear)');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+            saveBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.style.background = 'linear-gradient(135deg, var(--color-soft-green), var(--color-pastel-blue))';
+            }, 2000);
+        }
+
+        // Override the initDrawingCanvas function to use our enhanced version
+        window.initDrawingCanvas = function() {
+            const canvas = document.getElementById('drawing-canvas');
+            if (!canvas) return;
+
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth - 40; // Account for padding
+            canvas.height = Math.min(window.innerHeight * 0.6, 500); // Responsive height
+
+            const ctx = canvas.getContext('2d');
+
+            // Clear canvas with white background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Initial drawing settings
+            ctx.lineWidth = currentBrushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+
+            const startDrawing = (e) => {
+                isDrawing = true;
+                // Hide placeholder on first draw
+                document.getElementById('canvas-placeholder').style.display = 'none';
+
+                const rect = canvas.getBoundingClientRect();
+                lastX = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                lastY = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                draw(e);
+            };
+
+            const stopDrawing = () => {
+                if (isDrawing) {
+                    ctx.beginPath();
+                    isDrawing = false;
+                }
+            };
+
+            const draw = (e) => {
+                if (!isDrawing) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+                ctx.lineWidth = currentBrushSize;
+                ctx.strokeStyle = currentColor;
+                ctx.lineCap = 'round';
+
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+
+                lastX = x;
+                lastY = y;
+            };
+
+            // Mouse events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startDrawing(e);
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                draw(e);
+            });
+            canvas.addEventListener('touchend', stopDrawing);
+
+            // Resize handling
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth - 40;
+                const newHeight = Math.min(window.innerHeight * 0.6, 500);
+
+                // Save current drawing
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                // Resize canvas
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+
+                // Restore drawing settings
+                ctx.lineWidth = currentBrushSize;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = currentColor;
+
+                // Clear and redraw
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Only restore if there was actual drawing
+                if (imageData && !isCanvasEmpty(ctx)) {
+                    // Scale the drawing to fit new canvas size
+                    const scaleX = newWidth / imageData.width;
+                    const scaleY = newHeight / imageData.height;
+                    const scale = Math.min(scaleX, scaleY);
+
+                    ctx.save();
+                    ctx.scale(scale, scale);
+                    ctx.putImageData(imageData, 0, 0);
+                    ctx.restore();
+                }
+            });
+        };
+
+        // Helper function to check if canvas is empty
+        function isCanvasEmpty(ctx) {
+            const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                if (imageData.data[i + 3] !== 0) return false; // Alpha channel
+            }
+            return true;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initDrawingCanvas();
+        });
+    </script>
 </body>
 </html>

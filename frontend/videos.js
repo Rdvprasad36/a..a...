@@ -105,28 +105,3 @@ const videoData = {
 function getVideosForCategory(category) {
     return videoData[category] || [];
 }
-
-// Shared utility functions
-function navigate(targetUrl) {
-    window.location.href = targetUrl;
-}
-
-function showCustomMessage(message, title = "Heads Up!") {
-    const modal = document.getElementById('custom-message-modal');
-    const titleEl = document.getElementById('message-title');
-    const textEl = document.getElementById('custom-message-text');
-    if (modal && titleEl && textEl) {
-        titleEl.textContent = title;
-        textEl.textContent = message;
-        modal.style.display = 'block';
-    } else {
-        alert(message);
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}

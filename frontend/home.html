@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>అ... ఆ... KidSpace</title>
+    <title>అ... ఆ...</title>
     <style>
         /*
         =========================================================
@@ -262,12 +262,14 @@
         }
 
         .splash-logo {
-            font-size: 5em;
-            color: var(--color-orange);
-            font-weight: 900;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
             margin-bottom: 20px;
             /* Simple bounce/fade-in animation */
             animation: logoBounce 2s infinite alternate, logoFadeIn 1.5s ease-out;
+            border: 5px solid var(--color-orange);
         }
 
         @keyframes logoFadeIn {
@@ -819,6 +821,16 @@
             font-weight: 900;
             color: var(--color-orange);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .user-info {
@@ -970,7 +982,8 @@
 
     <!-- 1. Splash Screen -->
     <div id="splash-screen" class="app-screen active">
-        <div class="splash-logo">అ... ఆ...</div>
+        <img class="splash-logo" src="logo.jpeg" alt="అ... ఆ... Logo">
+        <h1 class="welcome-title">Welcome to అ... ఆ...! 🎉</h1>
         <div class="splash-lottie-placeholder">
             [Lottie Animation Placeholder]<br>🧑‍👩‍👧‍👦
         </div>
@@ -1048,7 +1061,10 @@
         <!-- Professional Header -->
         <header class="site-header">
             <div class="header-content">
-                <a href="#" class="site-logo">అ... ఆ...</a>
+                <a href="#" class="site-logo">
+                    <img src="logo.jpeg" alt="అ... ఆ... Logo" class="logo-icon">
+                    అ... ఆ...
+                </a>
                 <div class="user-info">
                     <span class="user-greeting">నమస్తే, <span id="child-greeting">చిట్టి</span>! 👋</span>
                     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -1469,8 +1485,7 @@
         const VIDEO_DATA = {
             'telugu': [
                 { id: 'iXYleETEiYo', title: 'Telugu Alphabets Part 1' },
-                { id: 'DyCm_xBLe7U', title: 'Telugu Alphabets Part 2' },
-                { id: 'DyCm_xBLe7U', title: 'Telugu Writing Practice' }
+                { id: 'DyCm_xBLe7U', title: 'Telugu Alphabets Part 2' }
             ],
             'grammar': [
                 { id: 'QahSR-a6raQ', title: 'Basic English Grammar' },
@@ -1492,18 +1507,15 @@
                 { id: 'garwCSnpNhI', title: 'Shapes and Patterns' }
             ],
             'history': [
-                { id: 'Dntu8vy4G7c', title: 'Ancient Civilizations' },
-                { id: '4S-eQIL8xVQ', title: 'Great Kings of India' },
-                { id: '3auYQuu_XnA', title: 'Historical Monuments' },
-                { id: 'cLJRs3YOlL8', title: 'Freedom Fighters' },
-                { id: 'Bo7JvJMQR2Q', title: 'Indian Culture Heritage' }
+                { id: '16bLbffpdfQ', title: 'Ancient Civilizations' },
+                { id: 'MYGU5HDXT6w', title: 'Great Kings of India' },
+                { id: 'o0e5A5hceUs', title: 'Historical Monuments' }
             ],
             'science': [
-                { id: '3FwJjsJQLT8', title: 'Fun Science Experiments' },
-                { id: 'hT3IVdwsvJM', title: 'Solar System Adventure' },
-                { id: 'E45BSndrhuo', title: 'Amazing Animals' },
-                { id: 'jFsZ4QNIxNY', title: 'Water Cycle Magic' },
-                { id: 'aUDENstXRFM', title: 'Plant Life Cycle' }
+                { id: 'P15rsMVtiFQ', title: 'Fun Science Experiments' },
+                { id: 'NEG5NnLqlno', title: 'Solar System Adventure' },
+                { id: 'RJ7r6Iws7Nk', title: 'Amazing Animals' },
+                { id: 'Rt1h0jcXgGA', title: 'Water Cycle Magic' }
             ],
             'ramayana': [
                 { id: '1UYLjVPgNPc', title: 'Birth of Lord Rama' },
@@ -1520,10 +1532,10 @@
                 { id: 'Ph4MfownyXY', title: 'Moral Stories' }
             ],
             'elearning': [
-                { id: 'iXYleETEiYo', title: 'Interactive Learning' },
-                { id: 'QahSR-a6raQ', title: 'Digital Classroom' },
-                { id: 'DZAB2Dpztp4', title: 'Online Education' },
-                { id: 'QcibLMpBDWg', title: 'E-Learning Tools' }
+                { id: '6g_fjnW77Fs', title: 'Interactive Learning' },
+                { id: 'DR-cfDsHCGA', title: 'Digital Classroom' },
+                { id: 'NvzvGvZT5V4', title: 'Online Education' },
+                { id: 'a-7jsy8wjAo', title: 'E-Learning Tools' }
             ]
         };
 

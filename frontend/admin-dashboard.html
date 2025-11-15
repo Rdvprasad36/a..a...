@@ -45,7 +45,8 @@
         }
 
         .app-screen.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         .dashboard-header {
@@ -292,11 +293,46 @@
             font-size: 1.1em;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--color-primary);
+            background-color: white;
+            color: var(--color-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-size: 0.9em;
+            color: var(--color-text-light);
+        }
+
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .dashboard-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -316,24 +352,45 @@
         </div>
 
         <div class="dashboard-grid">
-            <div class="dashboard-card card-analytics">
+            <div class="dashboard-card card-plan">
                 <div class="card-header">
-                    <h2 class="card-title">User Analytics</h2>
+                    <h2 class="card-title">Plan Management</h2>
                     <div class="card-icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-crown"></i>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-label">Total Users</div>
-                    <div class="stat-value" id="total-users">Loading...</div>
+                    <div class="stat-label">Current Plan</div>
+                    <div class="stat-value">Premium</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-label">Active Users Today</div>
+                    <div class="stat-label">Subscription Users</div>
+                    <div class="stat-value">890 <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 15%</span></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Free Users</div>
+                    <div class="stat-value">360 <span class="stat-trend trend-down"><i class="fas fa-arrow-down"></i> 5%</span></div>
+                </div>
+            </div>
+
+            <div class="dashboard-card card-analytics">
+                <div class="card-header">
+                    <h2 class="card-title">Detailed User Analytics</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Children</div>
+                    <div class="stat-value" id="total-children">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Parents</div>
+                    <div class="stat-value" id="total-parents">Loading...</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Active Today</div>
                     <div class="stat-value" id="active-today">Loading...</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">New Signups This Week</div>
-                    <div class="stat-value" id="new-signups">Loading...</div>
                 </div>
             </div>
 
@@ -379,26 +436,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-card card-plan">
-                <div class="card-header">
-                    <h2 class="card-title">Plan Management</h2>
-                    <div class="card-icon">
-                        <i class="fas fa-crown"></i>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Current Plan</div>
-                    <div class="stat-value">Premium</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Subscription Users</div>
-                    <div class="stat-value">890 <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 15%</span></div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Free Users</div>
-                    <div class="stat-value">360 <span class="stat-trend trend-down"><i class="fas fa-arrow-down"></i> 5%</span></div>
-                </div>
-            </div>
+            
         </div>
 
         <h2 class="section-title"><i class="fas fa-chart-line"></i> Performance Overview</h2>
@@ -443,6 +481,11 @@
                 <tbody id="users-table-body">
                 </tbody>
             </table>
+            <div class="pagination">
+                <button class="pagination-btn" id="prev-page" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <span class="pagination-info" id="page-info">Page 1 of 1</span>
+                <button class="pagination-btn" id="next-page" disabled>Next <i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
 
         <h2 class="section-title"><i class="fas fa-envelope"></i> Parent Messages</h2>
@@ -497,12 +540,16 @@
                     if (response.ok) {
                         // Update user analytics
                         const totalUsersEl = document.getElementById('total-users');
-                        const activeTodayEl = document.getElementById('active-today');
                         const newSignupsEl = document.getElementById('new-signups');
+                        const totalChildrenEl = document.getElementById('total-children');
+                        const totalParentsEl = document.getElementById('total-parents');
+                        const activeTodayEl = document.getElementById('active-today');
 
                         if (totalUsersEl) totalUsersEl.innerHTML = `${data.totalUsers || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> ${data.totalUsersTrend || 0}%</span>`;
-                        if (activeTodayEl) activeTodayEl.innerHTML = `${data.activeToday || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> ${data.activeTodayTrend || 0}%</span>`;
                         if (newSignupsEl) newSignupsEl.innerHTML = `${data.newSignupsWeek || 0} <span class="stat-trend trend-${data.newSignupsTrend < 0 ? 'down' : 'up'}"><i class="fas fa-arrow-${data.newSignupsTrend < 0 ? 'down' : 'up'}"></i> ${Math.abs(data.newSignupsTrend || 0)}%</span>`;
+                        if (totalChildrenEl) totalChildrenEl.innerHTML = `${data.totalChildren || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 12%</span>`;
+                        if (totalParentsEl) totalParentsEl.innerHTML = `${data.totalParents || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 8%</span>`;
+                        if (activeTodayEl) activeTodayEl.innerHTML = `${data.activeToday || 0} <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 25%</span>`;
 
                         // Update content analytics
                         const totalActivitiesEl = document.getElementById('total-activities');
@@ -520,23 +567,25 @@
                     } else {
                         // Show error message in the analytics section
                         const totalUsersEl = document.getElementById('total-users');
-                        const activeTodayEl = document.getElementById('active-today');
                         const newSignupsEl = document.getElementById('new-signups');
 
                         if (totalUsersEl) totalUsersEl.innerHTML = 'Error loading data';
-                        if (activeTodayEl) activeTodayEl.innerHTML = 'Error loading data';
                         if (newSignupsEl) newSignupsEl.innerHTML = 'Error loading data';
                     }
                 } catch (error) {
                     console.error('Failed to load analytics:', error);
                     // Show error message in the analytics section
                     const totalUsersEl = document.getElementById('total-users');
-                    const activeTodayEl = document.getElementById('active-today');
                     const newSignupsEl = document.getElementById('new-signups');
+                    const totalChildrenEl = document.getElementById('total-children');
+                    const totalParentsEl = document.getElementById('total-parents');
+                    const activeTodayEl = document.getElementById('active-today');
 
                     if (totalUsersEl) totalUsersEl.innerHTML = 'Error loading data';
-                    if (activeTodayEl) activeTodayEl.innerHTML = 'Error loading data';
                     if (newSignupsEl) newSignupsEl.innerHTML = 'Error loading data';
+                    if (totalChildrenEl) totalChildrenEl.innerHTML = 'Error loading data';
+                    if (totalParentsEl) totalParentsEl.innerHTML = 'Error loading data';
+                    if (activeTodayEl) activeTodayEl.innerHTML = 'Error loading data';
                 }
             }
 
@@ -592,37 +641,89 @@
                 }
             }
 
-            // Load users table
+            let allUsers = [];
+            let currentPage = 1;
+            const itemsPerPage = 5;
+
+            // Load users table with pagination
             async function loadUsers() {
                 try {
                     const response = await fetch(`${API_BASE}/admin/users`);
                     const users = await response.json();
 
                     if (response.ok && users) {
-                        const tableBody = document.getElementById('users-table-body');
-                        if (tableBody) {
-                            tableBody.innerHTML = '';
-                            users.forEach(user => {
-                                const date = new Date(user.signupdate).toLocaleDateString();
-                                const tableRow = document.createElement('tr');
-                                tableRow.innerHTML = `
-                                    <td>${user.childname}</td>
-                                    <td>${user.age}</td>
-                                    <td>${user.grade}</td>
-                                    <td>${user.parentemail}</td>
-                                    <td>${date}</td>
-                                    <td>${user.photo ? `<img src="${user.photo}" alt="Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">` : 'No photo'}</td>
-                                    <td>Protected</td>
-                                    <td>1234</td>
-                                `;
-                                tableBody.appendChild(tableRow);
-                            });
-                        }
+                        allUsers = users;
+                        renderUsersTable();
+                        updatePagination();
                     }
                 } catch (error) {
                     console.error('Failed to load users:', error);
                 }
             }
+
+            function renderUsersTable() {
+                const tableBody = document.getElementById('users-table-body');
+                if (!tableBody) return;
+
+                tableBody.innerHTML = '';
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const usersToShow = allUsers.slice(startIndex, endIndex);
+
+                usersToShow.forEach(user => {
+                    const date = new Date(user.signupdate).toLocaleDateString();
+                    const tableRow = document.createElement('tr');
+                    tableRow.innerHTML = `
+                        <td>${user.childname}</td>
+                        <td>${user.age}</td>
+                        <td>${user.grade}</td>
+                        <td>${user.parentemail}</td>
+                        <td>${date}</td>
+                        <td>${user.photo ? `<img src="${user.photo}" alt="Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">` : 'No photo'}</td>
+                        <td>Protected</td>
+                        <td>1234</td>
+                    `;
+                    tableBody.appendChild(tableRow);
+                });
+            }
+
+            function updatePagination() {
+                const totalPages = Math.ceil(allUsers.length / itemsPerPage);
+                const pageInfo = document.getElementById('page-info');
+                const prevBtn = document.getElementById('prev-page');
+                const nextBtn = document.getElementById('next-page');
+
+                if (pageInfo) {
+                    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                }
+
+                if (prevBtn) {
+                    prevBtn.disabled = currentPage === 1;
+                }
+
+                if (nextBtn) {
+                    nextBtn.disabled = currentPage === totalPages;
+                }
+            }
+
+            // Pagination event listeners
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsersTable();
+                    updatePagination();
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', () => {
+                const totalPages = Math.ceil(allUsers.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsersTable();
+                    updatePagination();
+                }
+            });
 
             // Load recent activities
             async function loadActivities() {

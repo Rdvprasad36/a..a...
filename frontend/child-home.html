@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KidSpace - Child Home</title>
+    <title>అ..ఆ... - Child Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -175,7 +174,8 @@
         }
 
         .logo-icon {
-            font-size: 1.5em;
+            width: 40px;
+            height: 40px;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -803,8 +803,8 @@
         <!-- Header -->
         <header class="site-header">
             <div class="site-logo">
-                <span class="logo-icon">🧸</span>
-                KidSpace
+                <img src="../logo.jpeg" alt="అ... ఆ... Logo" class="logo-icon">
+                అ... ఆ...
             </div>
             <div class="user-info">
                 <div class="user-greeting">Hello, <span id="child-greeting">Chitti</span>!</div>
@@ -822,7 +822,7 @@
         <div class="home-content">
             <!-- Welcome Section -->
             <section class="welcome-section">
-                <h1 class="welcome-title">Welcome to KidSpace! 🎉</h1>
+                <h1 class="welcome-title">Welcome to అ... ఆ...! 🎉</h1>
                 <p class="welcome-subtitle">Let's learn and play together!</p>
             </section>
 
@@ -953,12 +953,12 @@
                         <div>Puzzles & Games</div>
                     </div>
                     <!-- Drawing -->
-                    <div class="activity-card" onclick="openActivity('drawing')" style="border-color: var(--color-drawing);">
+                    <div class="activity-card" onclick="navigate('drawing.html')" style="border-color: var(--color-drawing);">
                         <span class="activity-card-icon" style="color: var(--color-drawing);">🎨</span>
                         <div>Drawing</div>
                     </div>
                     <!-- AI Storyteller -->
-                    <div class="activity-card" onclick="openActivity('ai_storyteller')" style="border-color: var(--color-ai);">
+                    <div class="activity-card" onclick="navigate('ai_story.html')" style="border-color: var(--color-ai);">
                         <span class="activity-card-icon" style="color: var(--color-ai);">🤖</span>
                         <div>AI Storyteller</div>
                     </div>
@@ -1133,11 +1133,13 @@
 
         // Activity opening function
         function openActivity(activity) {
-            // Show a message that this would open the activity
-            showMessage(`Opening ${activity.replace('_', ' ')} activity...`);
-            
-            // In a real app, this would navigate to the specific activity
-            // For demo purposes, we'll just show a message
+            // Navigate to video gallery with the activity as category
+            window.location.href = `video-gallery.html?category=${activity}`;
+        }
+
+        // Navigate to a specific page
+        function navigate(url) {
+            window.location.href = url;
         }
 
         // Show message modal
@@ -1191,6 +1193,6 @@
             return '🧑';
         }
     </script>
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>
